@@ -1,3 +1,4 @@
+
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
@@ -7,17 +8,22 @@ const protect = async (req, res, next) => {
   // Check Authorization Header
   if (
     req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
+    req.headers.authorization.startsWith("Bearer ")
   ) {
     try {
       // Get Token
       token = req.headers.authorization.split(" ")[1];
 
       // Verify Token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET
+      );
 
-      // Get User (exclude password)
-      req.user = await User.findById(decoded.id).select("-password");
+      // Get User and exclude password
+      req.user = await User.findById(decoded.id).select(
+        "-password"
+      );
 
       if (!req.user) {
         return res.status(401).json({
@@ -26,21 +32,22 @@ const protect = async (req, res, next) => {
         });
       }
 
-      next();
+      return next();
     } catch (error) {
+      console.error("Auth Middleware Error:", error);
+
       return res.status(401).json({
         success: false,
-        message: "Invalid token",
+        message: "Invalid or expired token",
       });
     }
   }
 
-  if (!token) {
-    return res.status(401).json({
-      success: false,
-      message: "No token provided",
-    });
-  }
+  return res.status(401).json({
+    success: false,
+    message: "No token provided",
+  });
 };
 
 module.exports = protect;
+
