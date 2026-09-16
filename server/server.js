@@ -9,7 +9,13 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const jobRoutes = require("./routes/jobRoutes");
-
+const applicationRoutes = require("./routes/applicationRoutes");
+const attendanceRoutes = require("./routes/attendanceRoutes");
+const insuranceRoutes = require("./routes/insuranceRoutes");
+const insuranceClaimRoutes = require("./routes/insuranceClaimRoutes");
+const insuranceReportRoutes = require("./routes/insuranceReportRoutes");
+const inspectionRoutes = require("./routes/inspectionRoutes");  
+const complaintRoutes = require("./routes/complaintRoutes");
 dotenv.config();
 
 // Connect Database
@@ -37,11 +43,20 @@ app.get("/", (req, res) => {
   });
 });
 
+// Static uploads
+app.use("/uploads", express.static("uploads"));
+
 // API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/jobs", jobRoutes);
-
+app.use("/api/applications", applicationRoutes);
+app.use("/api/attendance", attendanceRoutes);
+app.use("/api/insurance", insuranceRoutes);
+app.use("/api/insurance/claims", insuranceClaimRoutes);
+app.use("/api/insurance/reports", insuranceReportRoutes);
+app.use("/api/inspections", inspectionRoutes);
+app.use("/api/complaints",complaintRoutes);
 // 404 Handler
 app.use((req, res) => {
   res.status(404).json({

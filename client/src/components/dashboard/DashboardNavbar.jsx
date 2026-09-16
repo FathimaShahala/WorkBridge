@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -31,6 +30,15 @@ const DashboardNavbar = () => {
     ? `/${user.role}/profile`
     : "/";
 
+  // ==========================================
+  // Profile Image URL
+  // ==========================================
+  const profileImageUrl = user?.profileImage
+    ? user.profileImage.startsWith("http")
+      ? user.profileImage
+      : `http://localhost:5000${user.profileImage}`
+    : "";
+
   const handleLogout = () => {
     setProfileOpen(false);
     logoutUser();
@@ -40,7 +48,7 @@ const DashboardNavbar = () => {
     <header className="sticky top-0 z-30 border-b border-slate-200 bg-white">
       <div className="flex h-20 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
 
-        {/* Mobile spacing for sidebar button */}
+        {/* Welcome */}
         <div className="pl-12 lg:pl-0">
           <p className="text-sm text-slate-500">
             Welcome back,
@@ -51,7 +59,7 @@ const DashboardNavbar = () => {
           </h2>
         </div>
 
-        {/* Right side */}
+        {/* Right Side */}
         <div className="flex items-center gap-2 sm:gap-4">
 
           {/* Notifications */}
@@ -62,7 +70,6 @@ const DashboardNavbar = () => {
           >
             <Bell size={20} />
 
-            {/* Notification indicator */}
             <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500" />
           </Link>
 
@@ -71,6 +78,7 @@ const DashboardNavbar = () => {
 
           {/* Profile */}
           <div className="relative">
+
             <button
               type="button"
               onClick={() =>
@@ -79,22 +87,30 @@ const DashboardNavbar = () => {
               className="flex items-center gap-2 rounded-xl p-1.5 transition hover:bg-slate-100"
               aria-label="Open profile menu"
             >
+
               {/* Avatar */}
               <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-blue-100 font-semibold text-blue-600">
-                {user?.profileImage ? (
+
+                {profileImageUrl ? (
                   <img
-                    src={user.profileImage}
-                    alt={user.fullName || "User"}
+                    src={profileImageUrl}
+                    alt={user?.fullName || "User"}
                     className="h-full w-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
                   />
                 ) : (
-                  user?.fullName
-                    ?.charAt(0)
-                    ?.toUpperCase() || "U"
+                  <span>
+                    {user?.fullName
+                      ?.charAt(0)
+                      ?.toUpperCase() || "U"}
+                  </span>
                 )}
+
               </div>
 
-              {/* User information */}
+              {/* User Information */}
               <div className="hidden text-left md:block">
                 <p className="max-w-32 truncate text-sm font-semibold text-slate-900">
                   {user?.fullName || "User"}
@@ -108,37 +124,73 @@ const DashboardNavbar = () => {
               <ChevronDown
                 size={17}
                 className={`hidden text-slate-400 transition-transform md:block ${
-                  profileOpen ? "rotate-180" : ""
+                  profileOpen
+                    ? "rotate-180"
+                    : ""
                 }`}
               />
             </button>
 
-            {/* Profile dropdown */}
+            {/* Dropdown */}
             {profileOpen && (
               <>
-                {/* Click outside */}
+                {/* Click Outside */}
                 <button
                   type="button"
                   aria-label="Close profile menu"
-                  onClick={() => setProfileOpen(false)}
+                  onClick={() =>
+                    setProfileOpen(false)
+                  }
                   className="fixed inset-0 z-40 cursor-default"
                 />
 
                 <div className="absolute right-0 top-14 z-50 w-64 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl">
 
-                  {/* User info */}
+                  {/* User Info */}
                   <div className="border-b border-slate-100 p-4">
-                    <p className="truncate text-sm font-semibold text-slate-900">
-                      {user?.fullName || "User"}
-                    </p>
 
-                    <p className="mt-1 truncate text-xs text-slate-500">
-                      {user?.email || ""}
-                    </p>
+                    {/* Dropdown Avatar */}
+                    <div className="mb-3 flex items-center gap-3">
 
-                    <span className="mt-3 inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-blue-100 font-semibold text-blue-600">
+
+                        {profileImageUrl ? (
+                          <img
+                            src={profileImageUrl}
+                            alt={
+                              user?.fullName ||
+                              "User"
+                            }
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <span>
+                            {user?.fullName
+                              ?.charAt(0)
+                              ?.toUpperCase() ||
+                              "U"}
+                          </span>
+                        )}
+
+                      </div>
+
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold text-slate-900">
+                          {user?.fullName ||
+                            "User"}
+                        </p>
+
+                        <p className="truncate text-xs text-slate-500">
+                          {user?.email || ""}
+                        </p>
+                      </div>
+
+                    </div>
+
+                    <span className="inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600">
                       {role}
                     </span>
+
                   </div>
 
                   {/* Links */}
@@ -174,10 +226,12 @@ const DashboardNavbar = () => {
                       <LogOut size={18} />
                       Logout
                     </button>
+
                   </div>
                 </div>
               </>
             )}
+
           </div>
         </div>
       </div>

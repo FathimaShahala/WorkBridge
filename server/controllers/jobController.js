@@ -243,10 +243,37 @@ const deleteJob = async (req, res) => {
   }
 };
 
+// ==========================================
+// Get employer's own jobs
+// ==========================================
+const getMyJobs = async (req, res) => {
+  try {
+    const jobs = await Job.find({
+      employer: req.user.id,
+    })
+      .populate("employer", "fullName email")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: jobs.length,
+      jobs,
+    });
+  } catch (error) {
+    console.error("Get My Jobs Error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch your jobs.",
+    });
+  }
+};
+
 module.exports = {
   getJobs,
   getJobById,
   createJob,
   updateJob,
   deleteJob,
+    getMyJobs,
 };

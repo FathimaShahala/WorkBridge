@@ -1,49 +1,63 @@
 import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard,
-  Users,
   Briefcase,
   FileText,
   Settings,
+  User,
+  CalendarCheck,
 } from "lucide-react";
 
+import { useAuth } from "../../context/AuthContext";
+
 const Sidebar = () => {
+  const { user } = useAuth();
+
   const menu = [
     {
       name: "Dashboard",
       icon: LayoutDashboard,
-      path: "/dashboard",
-    },
-    {
-      name: "Workers",
-      icon: Users,
-      path: "/workers",
+      path: "/worker/dashboard",
     },
     {
       name: "Jobs",
       icon: Briefcase,
-      path: "/jobs",
+      path: "/worker/jobs",
     },
     {
-      name: "Reports",
+      name: "My Applications",
       icon: FileText,
-      path: "/reports",
+      path: "/worker/applications",
+    },
+    {
+      name: "Attendance",
+      icon: CalendarCheck,
+      path: "/worker/attendance",
     },
     {
       name: "Settings",
       icon: Settings,
-      path: "/settings",
+      path: "/worker/settings",
     },
   ];
 
+  const profileImageUrl = user?.profileImage
+    ? user.profileImage.startsWith("http")
+      ? user.profileImage
+      : `http://localhost:5000${user.profileImage}`
+    : "";
+
   return (
     <aside className="flex h-screen w-64 flex-col border-r border-slate-200 bg-white">
+
+      {/* Logo */}
       <div className="border-b p-6">
         <h2 className="text-xl font-bold text-blue-600">
           WorkBridge
         </h2>
       </div>
 
+      {/* Navigation */}
       <nav className="flex-1 p-4">
         {menu.map((item) => {
           const Icon = item.icon;
@@ -66,6 +80,42 @@ const Sidebar = () => {
           );
         })}
       </nav>
+
+      {/* User Profile */}
+      <div className="border-t border-slate-200 p-4">
+        <NavLink
+          to="/worker/profile"
+          className="flex items-center gap-3 rounded-xl p-2 transition hover:bg-slate-100"
+        >
+          {/* Profile Image */}
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-blue-100">
+            {profileImageUrl ? (
+              <img
+                src={profileImageUrl}
+                alt={user?.fullName || "Profile"}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <User
+                size={22}
+                className="text-blue-600"
+              />
+            )}
+          </div>
+
+          {/* User Details */}
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold text-slate-800">
+              {user?.fullName || "Worker"}
+            </p>
+
+            <p className="truncate text-xs capitalize text-slate-500">
+              {user?.role || "worker"}
+            </p>
+          </div>
+        </NavLink>
+      </div>
+
     </aside>
   );
 };

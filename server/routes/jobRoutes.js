@@ -6,6 +6,7 @@ const {
   createJob,
   updateJob,
   deleteJob,
+  getMyJobs,
 } = require("../controllers/jobController");
 
 const protect = require("../middleware/authMiddleware");
@@ -17,6 +18,14 @@ const router = express.Router();
 // Get all open jobs
 // ==========================================
 router.get("/", getJobs);
+
+// Get employer's own jobs
+router.get(
+  "/my",
+  protect,
+  authorize("employer"),
+  getMyJobs
+);
 
 // ==========================================
 // Get single job
