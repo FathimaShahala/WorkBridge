@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 
 // Routes
+const adminRoutes = require("./routes/adminRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const jobRoutes = require("./routes/jobRoutes");
@@ -14,8 +15,10 @@ const attendanceRoutes = require("./routes/attendanceRoutes");
 const insuranceRoutes = require("./routes/insuranceRoutes");
 const insuranceClaimRoutes = require("./routes/insuranceClaimRoutes");
 const insuranceReportRoutes = require("./routes/insuranceReportRoutes");
-const inspectionRoutes = require("./routes/inspectionRoutes");  
+const inspectionRoutes = require("./routes/inspectionRoutes");
 const complaintRoutes = require("./routes/complaintRoutes");
+const policeRoutes = require("./routes/policeRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
 dotenv.config();
 
 // Connect Database
@@ -28,7 +31,7 @@ app.use(
   cors({
     origin: "http://localhost:5173", // React Vite frontend
     credentials: true,
-  })
+  }),
 );
 
 app.use(express.json());
@@ -56,7 +59,10 @@ app.use("/api/insurance", insuranceRoutes);
 app.use("/api/insurance/claims", insuranceClaimRoutes);
 app.use("/api/insurance/reports", insuranceReportRoutes);
 app.use("/api/inspections", inspectionRoutes);
-app.use("/api/complaints",complaintRoutes);
+app.use("/api/complaints", complaintRoutes);
+app.use("/api/police", policeRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/notifications", notificationRoutes);
 // 404 Handler
 app.use((req, res) => {
   res.status(404).json({

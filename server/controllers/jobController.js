@@ -1,5 +1,6 @@
 const Job = require("../models/Job");
-
+const User = require("../models/User");
+const createNotification = require("../utils/notificationHelper");
 // ==========================================
 // Get all open jobs
 // ==========================================
@@ -94,6 +95,7 @@ const createJob = async (req, res) => {
       vacancies,
       deadline,
     });
+    
 
     // Return created job
     const createdJob = await Job.findById(job._id)
@@ -275,5 +277,5 @@ module.exports = {
   createJob,
   updateJob,
   deleteJob,
-    getMyJobs,
+  getMyJobs,
 };

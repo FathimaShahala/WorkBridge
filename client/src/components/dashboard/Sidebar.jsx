@@ -236,6 +236,11 @@ const Sidebar = () => {
         path: "/admin/settings",
         icon: Settings,
       },
+      {
+        name: "Profile",
+        path: "/admin/profile",
+        icon: UserCircle,
+      }
     ],
   };
 

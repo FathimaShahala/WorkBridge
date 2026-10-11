@@ -14,6 +14,7 @@ import {
 import { toast } from "react-hot-toast";
 
 import api from "../../services/api";
+import DashboardLayout from "../../components/dashboard/DashboardLayout";
 
 const MyInsurance = () => {
   const [insurance, setInsurance] = useState([]);
@@ -103,6 +104,7 @@ const MyInsurance = () => {
   };
 
   return (
+    <DashboardLayout>
     <div className="min-h-screen bg-gray-50 px-4 py-6 md:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
 
@@ -326,6 +328,7 @@ const MyInsurance = () => {
 
       </div>
     </div>
+    </DashboardLayout>
   );
 };
 

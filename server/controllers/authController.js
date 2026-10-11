@@ -2,6 +2,7 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const generateToken = require("../services/generateToken");
+const createNotification = require("../utils/notificationHelper");
 
 // Allowed WorkBridge roles
 const allowedRoles = [

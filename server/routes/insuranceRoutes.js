@@ -6,41 +6,7 @@ const insuranceController = require("../controllers/insuranceController");
 const protect = require("../middleware/authMiddleware");
 const authorize = require("../middleware/roleMiddleware");
 
-console.log("========== INSURANCE DEBUG ==========");
-console.log(
-  "getMyInsurance:",
-  typeof insuranceController.getMyInsurance
-);
 
-console.log(
-  "getMyInsuranceById:",
-  typeof insuranceController.getMyInsuranceById
-);
-
-console.log(
-  "getInsuranceById:",
-  typeof insuranceController.getInsuranceById
-);
-
-console.log(
-  "createInsurance:",
-  typeof insuranceController.createInsurance
-);
-
-console.log(
-  "updateInsurance:",
-  typeof insuranceController.updateInsurance
-);
-
-console.log(
-  "deleteInsurance:",
-  typeof insuranceController.deleteInsurance
-);
-
-console.log("protect:", typeof protect);
-console.log("authorize:", typeof authorize);
-
-console.log("====================================");
 
 const router = express.Router();
 
