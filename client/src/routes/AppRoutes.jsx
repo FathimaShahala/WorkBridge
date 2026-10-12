@@ -144,7 +144,7 @@ const AppRoutes = () => {
           <Route path="/labour/inspections" element={<LabourOfficerInspections />} />
           <Route path="/labourofficer/notifications" element={<LabourOfficerNotifications />} />
           <Route path="/labourofficer/settings" element={<LabourOfficerSettings />} />
-          <Route path="/labour/profile" element={<LabourProfile />} />
+          <Route path="/labourofficer/profile" element={<LabourProfile />} />
         </Route>
 
         {/* =========================
