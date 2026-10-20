@@ -5,6 +5,8 @@ const cookieParser = require("cookie-parser");
 
 const connectDB = require("./config/db");
 
+dotenv.config();
+
 // Routes
 const adminRoutes = require("./routes/adminRoutes");
 const authRoutes = require("./routes/authRoutes");
@@ -19,19 +21,31 @@ const inspectionRoutes = require("./routes/inspectionRoutes");
 const complaintRoutes = require("./routes/complaintRoutes");
 const policeRoutes = require("./routes/policeRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
-dotenv.config();
 
 // Connect Database
 connectDB();
 
 const app = express();
 
+// Allowed frontend origins
+const allowedOrigins = [
+  "http://localhost:5173",
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:5173", // React Vite frontend
+    origin: (origin, callback) => {
+      // Allow requests without an Origin header
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
-  }),
+  })
 );
 
 app.use(express.json());
@@ -63,6 +77,7 @@ app.use("/api/complaints", complaintRoutes);
 app.use("/api/police", policeRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/notifications", notificationRoutes);
+
 // 404 Handler
 app.use((req, res) => {
   res.status(404).json({
@@ -74,6 +89,6 @@ app.use((req, res) => {
 // Start Server
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`WorkBridge API running on port ${PORT}`);
 });

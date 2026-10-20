@@ -2,9 +2,15 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    const mongoURI = process.env.MONGODB_URI;
 
-    console.log(" MongoDB Connected");
+    if (!mongoURI) {
+      throw new Error("MONGODB_URI is not configured");
+    }
+
+    await mongoose.connect(mongoURI);
+
+    console.log("MongoDB connected successfully");
   } catch (error) {
     console.error("Database Error:", error.message);
     process.exit(1);
